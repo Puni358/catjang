@@ -1084,9 +1084,9 @@ function setPomodoroRestSec(sec) {
 const DEFAULT_SIZE = 100;
 const PET_SIZE_OPTIONS = [60, 80, 100, 120, 140, 160, 200, 240];
 // 윈도우 너비는 캐릭터 주변 여유와 말풍선 폭을 함께 담을 만큼 확보한다.
-const WINDOW_WIDTH_RATIO = 2;
-const MIN_WINDOW_WIDTH = 500;
-const WINDOW_EXTRA_RIGHT_PX = 2;
+const WINDOW_WIDTH_RATIO = 0.8;
+const MIN_WINDOW_WIDTH = 30;
+const WINDOW_EXTRA_RIGHT_PX = 0;
 let lastPetDragAt = 0;
 let currentPetSize = DEFAULT_SIZE;
 let currentPetPosition = null;
@@ -1229,7 +1229,7 @@ function createPetWindow() {
       }, 1000);
     }
   });
-  //if (!app.isPackaged) petWin.webContents.openDevTools({ mode: "detach" });
+  if (!app.isPackaged) petWin.webContents.openDevTools({ mode: "detach" });
 
   // 60Hz 마우스 위치 폴링 → renderer로 dx/dy 전송
   /*cursorPollTimer = setInterval(() => {
@@ -2154,7 +2154,7 @@ ipcMain.on("set-mouse-events-enabled", (_evt, enabled) => {
 });
 
 // Window height ratio — speech bubble and jump poses need extra vertical room.
-const STRETCH_RATIO = 4.8;
+const STRETCH_RATIO = 3.1;
 
 ipcMain.on("set-stretch-mode", () => {
   // 더 이상 윈도우 사이즈 변경 안 함 (윈도우가 처음부터 stretch 비율) — no-op

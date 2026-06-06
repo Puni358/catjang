@@ -2249,10 +2249,25 @@ function currentPoseElement() {
   return obj;
 }
 
+
+/*function isCatHitPoint(x, y) {
+  const pose = currentPoseElement();
+  if (!pose) return false;
+
+  const rect = pose.getBoundingClientRect();
+
+  const nx = (x - rect.left) / rect.width;
+  const ny = (y - rect.top) / rect.height;
+
+  return pointInEllipse(nx, ny, 0.5, 0.5, 0.20, 0.20);
+}*/
+
 function isCatHitPoint(x, y) {
+  //console.log(nx, ny);
   const pose = currentPoseElement();
   if (!pose) return false;
   const rect = pose.getBoundingClientRect();
+  console.log("CAT RECT", rect.width, rect.height);
   if (rect.width <= 0 || rect.height <= 0 || !rectContains(rect, x, y)) return false;
 
   const nx = (x - rect.left) / rect.width;
@@ -2265,8 +2280,9 @@ function isCatHitPoint(x, y) {
 
   return pointInEllipse(nx, ny, 0.4, 0.3, 0.24, 0.22) ||
     pointInEllipse(nx, ny, 0.55, 0.62, 0.3, 0.3) ||
-    (nx >= 0.28 && nx <= 0.72 && ny >= 0.3 && ny <= 0.78);
-}
+    (nx >= 0.28 && nx <= 0.72 && ny >= 0.3 && ny <= 0.78);  
+    
+} 
 
 function shouldReceiveMouseAt(x, y) {
   if (dragging) return true;
@@ -2728,7 +2744,7 @@ function chainTick() {
       stretchT = 0;
       stretchTVel = 0;
     }
-  }
+  }  
 
   // pendulum simulation — angle drives per-segment lateral targets below
   // while dragging, use stronger spring + more damping so old angle bleeds off fast
