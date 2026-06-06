@@ -988,7 +988,7 @@ function updateShakeDetection(dx, dy) {
 
 window.electronAPI.onCursorPos(({ dx, dy }) => {
   // 스트레칭 중에는 마우스 추적 정지 — layers가 자연스럽게 0으로 수렴
-  console.log("cursor:",dx, dy);
+  //console.log("cursor:",dx, dy);
 if (isStretching()) {
     targetDx = 0;
     targetDy = 0;
@@ -1010,7 +1010,7 @@ if (isStretching()) {
 
 function tick() {
   if (!layers) return;
-  console.log("tick", targetDx, targetDy, layers);
+  //console.log("tick", targetDx, targetDy, layers);
   for (const layer of Object.values(layers)) { //Object.values(layers)
     const tx = targetDx * layer.maxOffset;
     const ty = targetDy * layer.maxOffset;
@@ -1043,6 +1043,10 @@ function applyCatNameSettings(settings) {
   if (!settings) return;
   currentCatName = (settings.name || "Catjang").trim() || "Catjang";
   isCatNameVisible = !!settings.visible;  document.body.toggleAttribute("data-show-name", isCatNameVisible);
+   if (shareNameBadge) {
+    shareNameBadge.textContent = currentCatName;
+  }
+  
 }
 
 function applyUserNameSettings(settings) {
@@ -2058,6 +2062,8 @@ function setPetMouseEventsEnabled(enabled) {
   window.electronAPI.setMouseEventsEnabled(next);
 }
 
+setPetMouseEventsEnabled(true);
+
 function rectContains(rect, x, y) {
   return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
 }
@@ -2296,10 +2302,22 @@ function updateMouseEventPassthrough(event) {
     setPetMouseEventsEnabled(false);
     return;
   }
+  
+  const shouldReceive =
+    shouldReceiveMouseAt(event.clientX, event.clientY);
+
+  /*console.log(
+    "HITTEST",
+    event.clientX,
+    event.clientY,
+    shouldReceive
+  );*/
+
+    
   setPetMouseEventsEnabled(shouldReceiveMouseAt(event.clientX, event.clientY));
 }
 
-requestAnimationFrame(() => setPetMouseEventsEnabled(false));
+//requestAnimationFrame(() => setPetMouseEventsEnabled(false));
 
 // ── stretch-svg 자동 segment 분할 + 체인 wrapper 구축 ──
 const dxState = new Array(N_SEG).fill(0);
@@ -2824,6 +2842,7 @@ dragHandle.addEventListener("mousedown", (e) => {
 window.addEventListener("mousemove", updateMouseEventPassthrough, { passive: true });
 
 window.addEventListener("mousemove", (e) => {
+ // console.log("MOVE", e.clientX, e.clientY);
   const pointerMoved = Math.hypot(e.screenX - pointerDownScreenX, e.screenY - pointerDownScreenY);
   if (e.buttons && pointerMoved > DRAG_START_THRESHOLD_PX) {
     lastDragMoveAt = Date.now();

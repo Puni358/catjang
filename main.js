@@ -1229,7 +1229,7 @@ function createPetWindow() {
       }, 1000);
     }
   });
-  if (!app.isPackaged) petWin.webContents.openDevTools({ mode: "detach" });
+  //if (!app.isPackaged) petWin.webContents.openDevTools({ mode: "detach" });
 
   // 60Hz 마우스 위치 폴링 → renderer로 dx/dy 전송
   /*cursorPollTimer = setInterval(() => {
@@ -2141,12 +2141,16 @@ ipcMain.on("drag-window-ended", () => {
 });
 
 ipcMain.on("set-mouse-events-enabled", (_evt, enabled) => {
+  //console.log("MOUSE EVENTS:", enabled);
   if (!petWin || petWin.isDestroyed()) return;
-  if (enabled) {
-    petWin.setIgnoreMouseEvents(false);
-  } else {
-    petWin.setIgnoreMouseEvents(true, { forward: true });
-  }
+  //if (enabled) {
+  //  petWin.setIgnoreMouseEvents(false);
+  //} else {
+  //  petWin.setIgnoreMouseEvents(true, { forward: true });
+  //}
+  
+  // FORCE INTERACTIVE
+  petWin.setIgnoreMouseEvents(false);
 });
 
 // Window height ratio — speech bubble and jump poses need extra vertical room.
