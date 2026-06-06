@@ -1125,6 +1125,7 @@ function resizePetBy(delta) {
   const b = petWin.getBounds();
   currentPetSize = normalizePetSize(currentPetSize + delta);
   const { width, height } = windowDims(currentPetSize);
+
   petWin.setBounds({ x: b.x, y: b.y, width, height });
   currentPetPosition = { x: b.x, y: b.y };
   saveSettings();
@@ -2127,6 +2128,7 @@ ipcMain.on("drag-window", (_evt, dx, dy) => {
   lastPetDragAt = Date.now();
   const b = petWin.getBounds();
   const { width, height } = windowDims(currentPetSize);
+  // Allow unconstrained movement - cat can go off-screen (no clamping to display bounds)
   const nextBounds = { x: Math.round(b.x + dx), y: Math.round(b.y + dy), width, height };
   petWin.setBounds(nextBounds);
   currentPetPosition = { x: nextBounds.x, y: nextBounds.y };

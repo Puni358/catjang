@@ -2264,6 +2264,7 @@ function currentPoseElement() {
 
 function isCatHitPoint(x, y) {
   //console.log(nx, ny);
+  
   const pose = currentPoseElement();
   if (!pose) return false;
   const rect = pose.getBoundingClientRect();
@@ -2272,15 +2273,15 @@ function isCatHitPoint(x, y) {
 
   const nx = (x - rect.left) / rect.width;
   const ny = (y - rect.top) / rect.height;
-
+  console.log("HIT TEST", nx, ny);
   if (pose === stretchEndObj) {
     return pointInEllipse(nx, ny, 0.5, 0.2, 0.2, 0.14) ||
       pointInEllipse(nx, ny, 0.5, 0.52, 0.18, 0.38);
   }
 
   return pointInEllipse(nx, ny, 0.4, 0.3, 0.24, 0.22) ||
-    pointInEllipse(nx, ny, 0.55, 0.62, 0.3, 0.3) ||
-    (nx >= 0.28 && nx <= 0.72 && ny >= 0.3 && ny <= 0.78);  
+    pointInEllipse(nx, ny, 0.55, 0.62, 0.3, 0.3);
+    //|| (nx >= 0.28 && nx <= 0.72 && ny >= 0.3 && ny <= 0.78);  
     
 } 
 

@@ -12,7 +12,7 @@ html, body {
 /* 모든 캐릭터 SVG에 공통으로 적용되는 위쪽 padding — 머리 위 김(steam) 공간 확보 */
 :root {
   --cat-top: 22.5%;
-  --cat-size: calc(100vh / 2.7);
+  --cat-size: calc(100vh / 2.9);
 }
 
 /* drag region — 캐릭터 영역(윈도우 가운데 절반의 정사각형) */
@@ -783,12 +783,18 @@ body[data-editing-share-duration] #share-duration-editor {
   position: absolute;
   top: var(--cat-top);
   left: 50%;
-  transform: translateX(-50%);
+  /* allow small upward shift when we crop the bottom */
+  transform: translateX(-50%) translateY(var(--cat-crop-shift, -6%));
   width: var(--cat-size);
   aspect-ratio: 1;
   pointer-events: none;
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
+  /*display: block;
+  overflow: hidden;
+  /* crop only the bottom area (adjust --cat-bottom-crop to taste) */
+  /*--cat-bottom-crop: 12%;
+  clip-path: inset(0 0 var(--cat-bottom-crop) 0); */
 }
 
 #purr-hearts {

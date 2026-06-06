@@ -1,0 +1,8 @@
+/* Minimal styles for hit overlay used to make specific pixels opaque so Electron's forward:true can pass-through elsewhere */
+#cat-hit-overlay {
+  position: absolute;
+  pointer-events: auto; /* allow clicks on this element */
+  background: rgba(0,0,0,0.01); /* nearly transparent but non-zero alpha */
+  z-index: 10000; /* above other content */
+  display: none;
+}
