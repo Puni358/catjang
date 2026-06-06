@@ -1232,9 +1232,12 @@ function createPetWindow() {
   if (!app.isPackaged) petWin.webContents.openDevTools({ mode: "detach" });
 
   // 60Hz 마우스 위치 폴링 → renderer로 dx/dy 전송
-  cursorPollTimer = setInterval(() => {
+  /*cursorPollTimer = setInterval(() => {
     if (!petWin || petWin.isDestroyed()) return;
     const cursor = screen.getCursorScreenPoint();
+
+    console.log("MAIN:", cursor.x, cursor.y);
+
     const b = petWin.getBounds();
     const cx = b.x + b.width / 2;
     const cy = b.y + b.height / 2;
@@ -1242,7 +1245,7 @@ function createPetWindow() {
       dx: cursor.x - cx,
       dy: cursor.y - cy,
     });
-  }, 16);
+  }, 16); */
 
   petWin.on("closed", () => {
     if (cursorPollTimer) clearInterval(cursorPollTimer);
@@ -2767,6 +2770,28 @@ function startKeyHook() {
           rotation: event && typeof event.rotation === "number" ? event.rotation : 0,
         });
       });
+     
+     
+     
+     
+      /*uIOhook.on("mousemove", (event) => {
+        console.log("HOOK:", event.x, event.y);
+      });
+      */
+      uIOhook.on("mousemove", (event) => {
+      if (!petWin || petWin.isDestroyed()) return;
+
+      const b = petWin.getBounds();
+      const cx = b.x + b.width / 2;
+      const cy = b.y + b.height / 2;
+
+      petWin.webContents.send("cursor-pos", {
+      dx: event.x - cx,
+      dy: event.y - cy,
+        });
+      });
+
+     
       keyHookListenersAttached = true;
     }
     uIOhook.start();

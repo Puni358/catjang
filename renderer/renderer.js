@@ -1,4 +1,5 @@
 "use strict";
+console.log("Renderer Loaded");
 
 /**
  * Catjang 렌더러
@@ -987,7 +988,8 @@ function updateShakeDetection(dx, dy) {
 
 window.electronAPI.onCursorPos(({ dx, dy }) => {
   // 스트레칭 중에는 마우스 추적 정지 — layers가 자연스럽게 0으로 수렴
-  if (isStretching()) {
+  console.log("cursor:",dx, dy);
+if (isStretching()) {
     targetDx = 0;
     targetDy = 0;
     lastCursorSample = null;
@@ -1008,18 +1010,20 @@ window.electronAPI.onCursorPos(({ dx, dy }) => {
 
 function tick() {
   if (!layers) return;
-  for (const layer of Object.values(layers)) {
+  console.log("tick", targetDx, targetDy, layers);
+  for (const layer of Object.values(layers)) { //Object.values(layers)
     const tx = targetDx * layer.maxOffset;
     const ty = targetDy * layer.maxOffset;
 
     layer.x += (tx - layer.x) * layer.ease;
     layer.y += (ty - layer.y) * layer.ease;
 
-    if (Math.abs(layer.x) < 0.005 && Math.abs(layer.y) < 0.005 && tx === 0 && ty === 0) {
-      layer.x = 0;
-      layer.y = 0;
-    }
-
+    //if (Math.abs(layer.x) < 0.005 && Math.abs(layer.y) < 0.005 && tx === 0 && ty === 0) {
+      //layer.x = 0;
+      //layer.y = 0;
+    //}
+    layer.x += targetDx*0.05;
+    layer.y += targetDy*0.05;
     const qx = Math.round(layer.x * 8) / 8;
     const qy = Math.round(layer.y * 8) / 8;
 
@@ -1038,9 +1042,7 @@ function tick() {
 function applyCatNameSettings(settings) {
   if (!settings) return;
   currentCatName = (settings.name || "Catjang").trim() || "Catjang";
-  isCatNameVisible = !!settings.visible;
-  if (shareNameBadge) shareNameBadge.textContent = currentCatName;
-  document.body.toggleAttribute("data-show-name", isCatNameVisible);
+  isCatNameVisible = !!settings.visible;  document.body.toggleAttribute("data-show-name", isCatNameVisible);
 }
 
 function applyUserNameSettings(settings) {
