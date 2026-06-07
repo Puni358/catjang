@@ -2185,6 +2185,27 @@ function startPurring(clientX, clientY) {
   setIdleSvgClass("purring", true);
   document.body.dataset.purring = "1";
   purrWanted = true;
+  if (purringSound.paused && !purrPlayPromise) {
+    purringSound.currentTime = 0;
+    purrPlayPromise = purringSound.play()
+      .then(() => {
+        purrPlayPromise = null;
+        if (!purrWanted) stopPurring();
+      })
+      .catch(() => {
+        purrPlayPromise = null;
+      });
+  }
+  scheduleStopPurring(PURR_IDLE_TIMEOUT_MS);
+}
+
+function startMeowing(clientX, clientY) {
+  if (!isIdlePoseInteractive()) return;
+  const offset = purrFaceOffsetForPoint(clientX, clientY);
+  setPurrFaceOffset(offset.x, offset.y);
+  setIdleSvgClass("purring", true);
+  document.body.dataset.purring = "1";
+  purrWanted = true;
   if (hoverMeow.paused && !purrPlayPromise) {
     hoverMeow.currentTime = 0;
     purrPlayPromise = hoverMeow.play()
@@ -2879,7 +2900,12 @@ window.addEventListener("mousemove", (e) => {
     }
   }
   if (isIdleHeadPoint(e.clientX, e.clientY)) {
-    startPurring(e.clientX, e.clientY);
+    const shouldMeow = Math.random() > 0.5;
+    if (shouldMeow) {
+      startMeowing(e.clientX, e.clientY);
+    } else {
+      startPurring(e.clientX, e.clientY);
+    }
   } else if (!pendingDrag) {
     scheduleStopPurring(PURR_LEAVE_GRACE_MS);
   }
