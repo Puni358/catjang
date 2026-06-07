@@ -74,6 +74,7 @@ let updateCtaState = null;
 const completionMeow = new Audio("../workspace/assets/sound/meow.m4a");
 const reminderMeow = new Audio("../workspace/assets/sound/meow-alert.m4a");
 const purringSound = new Audio("../workspace/assets/sound/purring.m4a");
+const hoverMeow = new Audio("../workspace/assets/sound/meow.m4a");
 let completionMeowVolume = 0.1;
 const reminderMeowVolumeBoost = 2.4;
 completionMeow.volume = completionMeowVolume;
@@ -83,6 +84,8 @@ reminderMeow.preload = "auto";
 purringSound.loop = true;
 purringSound.preload = "auto";
 purringSound.volume = 0.28;
+hoverMeow.volume = 0.15;
+hoverMeow.preload = "auto";
 
 const I18N = {
   en: {
@@ -2182,9 +2185,9 @@ function startPurring(clientX, clientY) {
   setIdleSvgClass("purring", true);
   document.body.dataset.purring = "1";
   purrWanted = true;
-  if (purringSound.paused && !purrPlayPromise) {
-    purringSound.currentTime = 0;
-    purrPlayPromise = purringSound.play()
+  if (hoverMeow.paused && !purrPlayPromise) {
+    hoverMeow.currentTime = 0;
+    purrPlayPromise = hoverMeow.play()
       .then(() => {
         purrPlayPromise = null;
         if (!purrWanted) stopPurring();
@@ -2210,6 +2213,8 @@ function stopPurring() {
   purrStopTimer = null;
   purringSound.pause();
   purringSound.currentTime = 0;
+  hoverMeow.pause();
+  hoverMeow.currentTime = 0;
 }
 
 function currentPoseElement() {
@@ -2268,12 +2273,12 @@ function isCatHitPoint(x, y) {
   const pose = currentPoseElement();
   if (!pose) return false;
   const rect = pose.getBoundingClientRect();
-  console.log("CAT RECT", rect.width, rect.height);
+  //console.log("CAT RECT", rect.width, rect.height);
   if (rect.width <= 0 || rect.height <= 0 || !rectContains(rect, x, y)) return false;
 
   const nx = (x - rect.left) / rect.width;
   const ny = (y - rect.top) / rect.height;
-  console.log("HIT TEST", nx, ny);
+  //console.log("HIT TEST", nx, ny);
   if (pose === stretchEndObj) {
     return pointInEllipse(nx, ny, 0.5, 0.2, 0.2, 0.14) ||
       pointInEllipse(nx, ny, 0.5, 0.52, 0.18, 0.38);
