@@ -1230,7 +1230,7 @@ function createPetWindow() {
       }, 1000);
     }
   });
-  if (!app.isPackaged) petWin.webContents.openDevTools({ mode: "detach" });
+  //if (!app.isPackaged) petWin.webContents.openDevTools({ mode: "detach" });
 
   // 60Hz 마우스 위치 폴링 → renderer로 dx/dy 전송
   /*cursorPollTimer = setInterval(() => {
